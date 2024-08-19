@@ -203,11 +203,40 @@ export function use(fn, element, arg) {
   return untrack(() => fn(element, arg));
 }
 
-export function insert(parent, accessor, marker, initial) {
-  if (marker !== undefined && !initial) initial = [];
-  if (typeof accessor !== "function") return insertExpression(parent, accessor, initial, marker);
-  effect(current => insertExpression(parent, accessor(), current, marker), initial);
+export function insert(parent, accessor, map, index) {
+  // 如果存在则替换
+  if (map[index]) {
+    
+    return
+  }
+  // 否则直接插入
+  for (let i = index + 1; i < map.length; i++) {
+    const node = map[i];
+    if (node) {
+      const curr_val = accessor();
+      let new_node;
+      if (typeof curr_val === "string") {
+        new_node = document.createTextNode(curr_val);
+      } else if (
+        typeof curr_val === "number" ||
+        typeof curr_val === "bigint" ||
+        typeof curr_val === "boolean"
+      ) {
+        new_node = document.createTextNode(curr_val + "");
+      } else if (curr_val instanceof Node) {
+        new_node = curr_val;
+      } else {
+        new_node = document.createTextNode(String(curr_val));
+      }
+      parent.insertBefore(node, new_node);
+    }
+  }
 }
+// export function insert(parent, accessor, marker, initial) {
+//   if (marker !== undefined && !initial) initial = [];
+//   if (typeof accessor !== "function") return insertExpression(parent, accessor, initial, marker);
+//   effect(current => insertExpression(parent, accessor(), current, marker), initial);
+// }
 
 export function assign(node, props, isSVG, skipChildren, prevProps = {}, skipRef = false) {
   props || (props = {});
@@ -466,7 +495,7 @@ function insertExpression(parent, value, current, marker, unwrapArray) {
       if (marker === undefined) return (current = [...parent.childNodes]);
       let node = array[0];
       if (node.parentNode !== parent) return current;
-      const nodes = [node]
+      const nodes = [node];
       while ((node = node.nextSibling) !== marker) nodes.push(node);
       return (current = nodes);
     }

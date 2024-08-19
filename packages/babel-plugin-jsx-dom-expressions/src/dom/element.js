@@ -1101,7 +1101,7 @@ function transformChildren(path, results, config) {
               contentId
                 ? [results.id, child.exprs[0], exprId, contentId]
                 : [results.id, child.exprs[0], exprId],
-              index,
+              // index,
               // @modify
               map_id,
               t.numericLiteral(index)
@@ -1116,7 +1116,7 @@ function transformChildren(path, results, config) {
             t.callExpression(insert, [
               results.id,
               child.exprs[0],
-              nextChild(childNodes, index) || t.nullLiteral(),
+              // nextChild(childNodes, index) || t.nullLiteral(),
               // @modify
               map_id,
               t.numericLiteral(index),
@@ -1131,7 +1131,7 @@ function transformChildren(path, results, config) {
               results.id,
               child.exprs[0],
               // @modify
-              t.nullLiteral(),
+              // t.nullLiteral(),
               map_id,
               t.numericLiteral(index),
               // @modify-end

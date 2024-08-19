@@ -17,8 +17,8 @@ export function untrack<T>(fn: () => T): T;
 export function insert<T>(
   parent: MountableElement,
   accessor: (() => T) | T,
-  marker?: Node | null,
-  init?: JSX.Element
+  map: Node[],
+  index: number
 ): JSX.Element;
 export function createComponent<T>(Comp: (props: T) => JSX.Element, props: T): JSX.Element;
 export function delegateEvents(eventNames: string[], d?: Document): void;
